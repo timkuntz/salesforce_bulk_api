@@ -48,7 +48,7 @@ module SalesforceBulkApi
 
     def add_query
       path = "job/#{@@job_id}/batch/"
-      headers = Hash["Content-Type" => "text/csv; charset=UTF-8"]
+      headers = Hash["Content-Type" => "application/xml; charset=UTF-8"]
 
       response = @@connection.post_xml(nil, path, @@records, headers)
       response_parsed = XmlSimple.xml_in(response)
@@ -118,7 +118,7 @@ module SalesforceBulkApi
 
         path = "job/#{@@job_id}/batch/#{@@batch_id}/result/#{result_id}"
         headers = Hash.new
-        headers = Hash["Content-Type" => "application/xml; charset=UTF-8"]
+        headers = Hash["Content-Type" => "text/csv; charset=UTF-8"]
         response = @@connection.get_request(nil, path, headers)
       end
 
