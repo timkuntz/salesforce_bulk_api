@@ -23,7 +23,7 @@ module SalesforceBulkApi
     def update(sobject, records)
       self.do_operation('update', sobject, records, nil)
     end
-    
+
     def create(sobject, records)
       self.do_operation('insert', sobject, records, nil)
     end
@@ -32,13 +32,13 @@ module SalesforceBulkApi
       self.do_operation('delete', sobject, records, nil)
     end
 
-    def query(sobject, query)
-      self.do_operation('query', sobject, query, nil)
+    def query(sobject, query, io = nil)
+      self.do_operation('query', sobject, query, nil, io)
     end
 
     #private
 
-    def do_operation(operation, sobject, records, external_field)
+    def do_operation(operation, sobject, records, external_field, io = nil)
       job = SalesforceBulkApi::Job.new(operation, sobject, records, external_field, @connection)
 
       # TODO: put this in one function
@@ -60,7 +60,7 @@ module SalesforceBulkApi
       end
 
       if state == 'Completed'
-        job.get_batch_result()
+        job.get_batch_result(io)
       else
         return "error"
       end

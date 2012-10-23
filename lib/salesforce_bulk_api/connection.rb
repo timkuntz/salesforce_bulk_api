@@ -39,13 +39,17 @@ module SalesforceBulkApi
       https(host).post(path, xml, headers).body
     end
 
-    def get_request(host, path, headers)
+    def get_request(host, path, headers, io = nil)
       host = host || @@INSTANCE_HOST
       path = "#{@@PATH_PREFIX}#{path}"
       if host != @@LOGIN_HOST # Not login, need to add session id to header
         headers['X-SFDC-Session'] = @session_id;
       end
-      https(host).get(path, headers).body
+      if io
+        https(host).get(path, headers) {|chunk| io.write chunk}
+      else
+        https(host).get(path, headers).body
+      end
     end
 
     def https(host)
